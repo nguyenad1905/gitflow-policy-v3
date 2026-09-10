@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -euo pipefail
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+source "$REPO_ROOT/.gitflow/policy.sh"
+BRANCH="$(git symbolic-ref --quiet --short HEAD || true)"
+if ! is_work_branch "$BRANCH"; then
+  die "Commits on '${BRANCH:-detached HEAD}' are disabled. Run: git switch -c feature/<name>  (or bugfix/<name>)"
+fi

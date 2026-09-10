@@ -1,0 +1,4 @@
+# Shell hooks must stay LF so shebang works on Linux and Git for Windows.
+.gitflow/** text eol=lf
+.githooks/** text eol=lf
+scripts/*.sh text eol=lf

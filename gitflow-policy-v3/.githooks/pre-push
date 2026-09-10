@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -euo pipefail
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+source "$REPO_ROOT/.gitflow/policy.sh"
+while read -r LOCAL_REF LOCAL_SHA REMOTE_REF REMOTE_SHA; do
+  [[ -z "${REMOTE_REF:-}" ]] && continue
+  [[ "$REMOTE_REF" == refs/heads/* ]] || continue
+  REMOTE_BRANCH="${REMOTE_REF#refs/heads/}"
+  if ! is_work_branch "$REMOTE_BRANCH"; then
+    if is_protected_branch "$REMOTE_BRANCH"; then
+      die "Direct push to '$REMOTE_BRANCH' is forbidden. Push a work branch: git push -u origin HEAD"
+    fi
+    die "Push to '$REMOTE_BRANCH' is forbidden. Only feature/* and bugfix/*. Rename: git branch -m feature/<name>"
+  fi
+done

@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Warn (do not block) when checking out a protected branch.
+set -euo pipefail
+# post-checkout args: prev_HEAD new_HEAD flag (1=branch checkout, 0=file checkout)
+[[ "${3:-0}" == "1" ]] || exit 0
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+source "$REPO_ROOT/.gitflow/policy.sh"
+BRANCH="$(git symbolic-ref --quiet --short HEAD || true)"
+if is_protected_branch "$BRANCH"; then
+  echo "WARN: on protected branch '$BRANCH'. Before editing, run: git switch -c feature/<name>" >&2
+fi
