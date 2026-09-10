@@ -1,4 +1,6 @@
-# Repository GitFlow Policy
+# Repository GitFlow Policy — MANDATORY for AI agents
+
+These rules are **hard requirements**. Do not reinterpret, soften, or work around them.
 
 ```text
 feature/* ──┐
@@ -6,16 +8,19 @@ feature/* ──┐
 bugfix/* ──┘
 ```
 
-0. After clone, enable hooks once: `./scripts/setup-git-hooks.sh` (Linux/macOS/Git Bash). On Windows use Git for Windows and run this in Git Bash.
-1. `main` accepts changes only through a PR from `develop`.
-2. `develop` accepts changes only through a PR from `feature/*` or `bugfix/*`.
-3. Direct pushes to `main` and `develop` are forbidden.
-4. Commit and push only on `feature/*` or `bugfix/*` (never on `main`, `develop`, or ad-hoc branch names).
-5. Do not create local merge commits while on `main` or `develop`.
-6. Finish and push a work branch before opening its PR to `develop`.
-7. Do not bypass policy with `--no-verify` or alternate refspecs.
+## Required setup
 
-Before editing: run `git branch --show-current`. If you are on `main`, `develop`, or not on `feature/*`/`bugfix/*`, create/switch to a work branch first (`git switch -c feature/<name>`).
-A `post-checkout` WARN on protected branches is a reminder only — it does not block checkout.
-AI agents should commit on work branches, push when the user confirms the work is ready, then create the PR. Never merge a PR that violates the source/target rules.
-If a hook fails, follow the command in the ERROR message (usually `git switch -c feature/<name>`).
+After clone (once per workspace): run `./scripts/setup-git-hooks.sh` (Linux/macOS/Git Bash). On Windows: Git for Windows + Git Bash.
+
+## Rules (must follow)
+
+1. Before any edit: `git branch --show-current`. If not on `feature/*` or `bugfix/*`, run `git switch -c feature/<name>` (or `bugfix/<name>`) first.
+2. Commit and push **only** on `feature/*` or `bugfix/*`. Never on `main`, `develop`, detached HEAD, or ad-hoc names.
+3. Never push directly to `main` or `develop`.
+4. Never create local merge commits on `main` or `develop`.
+5. PR targets: `feature/*|bugfix/*` → `develop` only; `develop` → `main` only. Never open or merge a PR that breaks this.
+6. Push the work branch when the user confirms work is ready, then open the PR.
+7. **Never** use `--no-verify`, `--no-gpg-sign` to skip hooks, alternate refspecs into protected branches, or any bypass of these rules.
+8. If a hook fails: read the ERROR, run the suggested command, retry. Do not bypass the hook.
+
+Hooks reinforce this policy. Treat hook failures as policy violations, not obstacles to skip.

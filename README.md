@@ -1,6 +1,6 @@
 # Provider-Agnostic GitFlow Policy v3
 
-Local hooks + `AGENTS.md` so coding agents stay on the GitFlow path. Not a remote security boundary.
+**`AGENTS.md` is mandatory policy for AI coding agents** — they must follow GitFlow strictly. Local hooks reinforce that policy (fail early). Independent of Cursor, Claude Code, Codex, Gemini, etc.
 
 ## Flow
 
@@ -12,7 +12,7 @@ bugfix/* ──┘
 
 ## Local setup
 
-Run once after cloning. Needs **Git** (on Windows: **Git for Windows** + run setup in **Git Bash**).
+Run once after cloning (each workspace). Needs **Git** (on Windows: **Git for Windows** + **Git Bash**).
 
 ```bash
 ./scripts/setup-git-hooks.sh
@@ -32,5 +32,3 @@ git push -u origin feature/my-change
 
 After completion and user confirmation, open `feature/my-change -> develop`.
 For release promotion, use `develop -> main`.
-
-Hooks can be bypassed (`--no-verify`). `core.hooksPath` is per-clone — run the setup script in each workspace.
